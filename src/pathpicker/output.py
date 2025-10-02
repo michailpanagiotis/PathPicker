@@ -74,6 +74,31 @@ def output_selection(line_objs: List[LineMatch]) -> None:
     pickle.dump(indices, file)
     file.close()
 
+def find_previous_selection_index(line_matches) -> int:
+    selection_path = state_files.get_selection_file_path()
+    if not os.path.isfile(selection_path):
+        return 0
+
+    try:
+        with open(selection_path, "rb") as file:
+            selected_indices = pickle.load(file)
+        os.remove(selection_path)
+    except (OSError, KeyError, pickle.PickleError):
+        return 0
+
+    if not selected_indices:
+        return 0
+
+    # Get the last selected index from previous session
+    previous_index = selected_indices[-1]
+
+    # Find this index in current line_matches
+    for i, line_match in enumerate(line_matches):
+        if line_match.index == previous_index:
+            return i
+
+    # If not found, return 0
+    return 0
 
 def get_editor_and_path() -> Tuple[str, str]:
     editor_path = (

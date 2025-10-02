@@ -330,6 +330,13 @@ class Controller:
         self.num_lines = len(line_objs.keys())
         self.num_matches = len(self.line_matches)
 
+        if self.flags.get_single_select():
+            # Try to restore previous selection position
+            previous_selection_index = output.find_previous_selection_index(self.line_matches)
+            if previous_selection_index < self.num_matches:
+                self.hover_index = previous_selection_index
+                self.set_select(False)
+
         self.set_hover(self.hover_index, True)
 
         # the scroll offset might not start off
