@@ -366,14 +366,26 @@ class Controller:
         self.line_matches[index].set_hover(val)
 
     def toggle_select(self) -> None:
+        if self.flags.get_single_select():
+            self.toggle_deselect_all()
         self.line_matches[self.hover_index].toggle_select()
 
+    def toggle_deselect_all(self) -> None:
+          for line_match in self.line_matches:
+              if line_match != self.line_matches[self.hover_index]:
+                  line_match.set_select(False)
+
     def toggle_select_all(self) -> None:
-        paths = set()
-        for line in self.line_matches:
-            if line.get_path() not in paths:
-                paths.add(line.get_path())
-                line.toggle_select()
+        if self.flags.get_single_select():
+            self.toggle_deselect_all()
+            # In single-select mode, just select the hovered item
+            self.set_select(True)
+        else:
+            paths = set()
+            for line in self.line_matches:
+                if line.get_path() not in paths:
+                    paths.add(line.get_path())
+                    line.toggle_select()
 
     def set_select(self, val: bool) -> None:
         self.line_matches[self.hover_index].set_select(val)
@@ -486,7 +498,8 @@ class Controller:
             self.toggle_select()
         elif key == "F":
             self.toggle_select()
-            self.move_index(1)
+            if not self.flags.get_single_select():
+                self.move_index(1)
         elif key == "A" and not self.mode == X_MODE:
             self.toggle_select_all()
         elif key == "ENTER" and (

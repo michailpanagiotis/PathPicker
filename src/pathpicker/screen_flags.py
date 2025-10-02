@@ -43,6 +43,9 @@ class ScreenFlags:
     def get_keep_open(self) -> bool:
         return bool(self.args.keep_open)
 
+    def get_single_select(self) -> bool:
+        return bool(self.args.single_select)
+
     @staticmethod
     def get_arg_parser() -> argparse.ArgumentParser:
         parser = argparse.ArgumentParser(prog="fpp")
@@ -148,6 +151,14 @@ subshell, like a normal shell script.""",
             action="store_true",
             help="""Automatically select all available lines
 once the interactive editor has been entered.""",
+        )
+        parser.add_argument(
+            "-s",
+            "--single-select",
+            default=False,
+            action="store_true",
+            help="""Limit selection to a single file. When a file is selected,
+          any previously selected files will be automatically deselected.""",
         )
         return parser
 
