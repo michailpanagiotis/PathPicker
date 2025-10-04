@@ -515,6 +515,20 @@ class Controller:
             # it does not make sense to process an 'ENTER' keypress if we're in
             # the allInput mode and there is not a preset command.
             self.on_enter()
+        elif key == "n" and (
+            not self.flags.get_all_input() or self.flags.get_preset_command()
+        ):
+            self.move_index(1)
+            # it does not make sense to process an 'ENTER' keypress if we're in
+            # the allInput mode and there is not a preset command.
+            self.on_enter()
+        elif key == "p" and (
+            not self.flags.get_all_input() or self.flags.get_preset_command()
+        ):
+            self.move_index(-1)
+            # it does not make sense to process an 'ENTER' keypress if we're in
+            # the allInput mode and there is not a preset command.
+            self.on_enter()
         elif key == "q":
             output.output_nothing()
             # this will get the appropriate selection and save it to a file for
