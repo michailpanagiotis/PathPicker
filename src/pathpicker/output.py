@@ -168,7 +168,7 @@ def compose_command(command: str, line_objs: List[LineMatch]) -> str:
 
 def compose_file_command(command: str, line_objs: List[LineMatch]) -> str:
     command = command.encode().decode("utf-8")
-    paths = [f"'{line_obj.get_path()}'" for line_obj in line_objs]
+    paths = [f"\"{line_obj.get_path()}\"" for line_obj in line_objs]
     path_str = " ".join(paths)
     if "$F" in command:
         command = command.replace("$F", path_str)
